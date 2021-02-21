@@ -1,5 +1,6 @@
 const fs = require('fs')
 const splitLines = require('split-lines');
+const config = require('./config')
 
 
 module.exports.hasBadWords = function(string){
