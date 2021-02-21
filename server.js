@@ -62,7 +62,11 @@ app.get('/', function(req, res){
     console.log(`Just received a msg!\n There are ${msgQueue.length} msgs to send`)
   });
 
-
+  app.get('/:transaction_id',(req,res)=>{
+    let transaction_id = req.params.transaction_id
+    const status = msgStatus[transaction_id]
+    res.send(status)
+  });
 
 
 
