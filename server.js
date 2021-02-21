@@ -7,25 +7,32 @@ const config = require('./config')
 let msgQueue = []
 let msgStatus = {}
 
+function hasBadWords(string){
+    let badWords = fs.readFileSync('bad-words.txt').toString().split("\n");
 
-
-
-function sendMsg(){
+    return true
+}
+function handleMsg(){
     if(msgQueue.length){
         let msg = msgQueue.shift()
-        const serviceMsg = Object.assign({}, msg);
-        delete serviceMsg.transaction_id
-        axios.post(config.FAKE_SMS_URL,serviceMsg)
-        .then(response=>{
-            msgStatus[msg.transaction_id] = 'SENT '
-        })
-        .catch(err=>{
+        if(hasBadWords(msg.message)){
             msgStatus[msg.transaction_id] = 'FAILED'
-        }) 
+        }else{
+            const serviceMsg = Object.assign({}, msg);
+            delete serviceMsg.transaction_id
+            axios.post(config.FAKE_SMS_URL,serviceMsg)
+                .then(response=>{
+                    msgStatus[msg.transaction_id] = 'SENT '
+                })
+                .catch(err=>{
+                    msgStatus[msg.transaction_id] = 'FAILED'
+                }) 
+        }
+        
     }
 }
 
-setInterval(sendMsg,config.SENDING_INTERVAL)
+setInterval(handleMsg,config.SENDING_INTERVAL)
 
 const app = express();
 app.use(express.json());
