@@ -9,13 +9,17 @@ let msgStatus = {}
 
 function hasBadWords(string){
     let badWords = fs.readFileSync('bad-words.txt').toString().split("\n");
-
     return true
+}
+
+function isOld(msg){
+    return Date.now() - msg.time.getMilliseconds() < config.TIMEOUT
+
 }
 function handleMsg(){
     if(msgQueue.length){
         let msg = msgQueue.shift()
-        if(hasBadWords(msg.message)){
+        if(hasBadWords(msg.message)|| isOld(msg){
             msgStatus[msg.transaction_id] = 'FAILED'
         }else{
             const serviceMsg = Object.assign({}, msg);
@@ -49,6 +53,7 @@ app.get('/', function(req, res){
     const transaction_id = uuidv4();
     let msgBody = req.body
     msgBody.transaction_id = transaction_id
+    msgBody.time = new Date()
     msgQueue.push(msgBody)
     res.send(transaction_id);
     msgStatus[transaction_id] = 'ACCEPTED' 
