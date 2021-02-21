@@ -8,6 +8,8 @@ let msgQueue = []
 let msgStatus = {}
 
 
+
+
 function sendMsg(){
     if(msgQueue.length){
         let msg = msgQueue.shift()
@@ -15,7 +17,7 @@ function sendMsg(){
         delete serviceMsg.transaction_id
         axios.post(config.FAKE_SMS_URL,serviceMsg)
         .then(response=>{
-            msgStatus[msg.transaction_id] = 'ACCEPTED'
+            msgStatus[msg.transaction_id] = 'SENT '
         })
         .catch(err=>{
             msgStatus[msg.transaction_id] = 'FAILED'
