@@ -32,11 +32,10 @@ function handleMsg(){
                     msgStatus[msg.transaction_id] = 'FAILED'
                 }) 
         }
-        
     }
 }
 
-setInterval(handleMsg,config.SENDING_INTERVAL)
+setInterval(handleMsg,config.RATE_LIMITING)
 
 const app = express();
 app.use(express.json());
