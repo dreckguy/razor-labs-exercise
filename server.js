@@ -1,3 +1,4 @@
+const fs = require('fs')
 const express = require('express')
 const axios = require('axios')
 const uuidv4 = require('uuid').v4;
@@ -63,6 +64,7 @@ app.get('/', function(req, res){
   });
 
   app.get('/:transaction_id',(req,res)=>{
+      console.log('transaction!')
     let transaction_id = req.params.transaction_id
     const status = msgStatus[transaction_id]
     res.send(status)
