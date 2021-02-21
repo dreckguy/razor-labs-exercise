@@ -1,4 +1,3 @@
-const fs = require('fs')
 const express = require('express')
 const axios = require('axios')
 const uuidv4 = require('uuid').v4;
