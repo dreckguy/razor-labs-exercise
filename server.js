@@ -19,7 +19,7 @@ function isOld(msg){
 function handleMsg(){
     if(msgQueue.length){
         let msg = msgQueue.shift()
-        if(hasBadWords(msg.message)|| isOld(msg){
+        if(hasBadWords(msg.message)|| isOld(msg)){
             msgStatus[msg.transaction_id] = 'FAILED'
         }else{
             const serviceMsg = Object.assign({}, msg);
