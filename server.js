@@ -4,26 +4,15 @@ const axios = require('axios')
 const uuidv4 = require('uuid').v4;
 
 const config = require('./config')
+const helper = require('./helper')
 
 let msgQueue = []
 let msgStatus = {}
 
-function hasBadWords(string){
-    let badWords = fs.readFileSync('bad-words.txt').toString().split("\n");
-    let words = string.split(' ');
-    return words.some(word=>{
-        badWords.includes(word)
-    })
-}
-
-function isOld(msg){
-    return Date.now() - msg.time.getMilliseconds() < config.TIMEOUT
-
-}
 function handleMsg(){
     if(msgQueue.length){
         let msg = msgQueue.shift()
-        if(hasBadWords(msg.message)|| isOld(msg)){
+        if(helper.hasBadWords(msg.message)|| helper.isOld(msg)){
             msgStatus[msg.transaction_id] = 'FAILED'
         }else{
             const serviceMsg = Object.assign({}, msg);
@@ -64,7 +53,6 @@ app.get('/', function(req, res){
   });
 
   app.get('/:transaction_id',(req,res)=>{
-      console.log('transaction!')
     let transaction_id = req.params.transaction_id
     const status = msgStatus[transaction_id]
     res.send(status)
