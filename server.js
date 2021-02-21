@@ -9,7 +9,10 @@ let msgStatus = {}
 
 function hasBadWords(string){
     let badWords = fs.readFileSync('bad-words.txt').toString().split("\n");
-    return true
+    let words = string.split(' ');
+    return words.some(word=>{
+        badWords.includes(word)
+    })
 }
 
 function isOld(msg){
